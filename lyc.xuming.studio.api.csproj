@@ -2,9 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationInsightsResourceId>/subscriptions/a4dbd85d-b5f1-4627-9b46-8819b86474de/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/lyc.xuming.studio.api</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/a4dbd85d-b5f1-4627-9b46-8819b86474de/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/lyc.xuming.studio.api</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
   </ItemGroup>
 
