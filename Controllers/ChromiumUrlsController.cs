@@ -7,8 +7,8 @@ using System.Net;
 namespace lyc.xuming.studio.api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/ChromiumDownload")]
-    public class ChromiumDownloadController : Controller
+    [Route("api/ChromiumUrls")]
+    public class ChromiumUrlsController : Controller
     {
         static Dictionary<string, KeyValuePair<string, DateTime>> ChromiumBuilds = new Dictionary<string, KeyValuePair<string, DateTime>>();
         static string templatePrefix = "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/";
@@ -28,7 +28,7 @@ namespace lyc.xuming.studio.api.Controllers
                 downloadUrlTemplates.Add("Mac", templatePrefix + "Mac%2F{0}%2Fchrome-mac.zip?alt=media");
             }
         }
-        // GET: api/ChromiumDownload
+        // GET: api/ChromiumUrls
         [HttpGet]
         public object Get()
         {
@@ -40,7 +40,7 @@ namespace lyc.xuming.studio.api.Controllers
             return ChromiumBuilds.Keys.ToDictionary(platform => platform, platform => String.Format(downloadUrlTemplates[platform], ChromiumBuilds[platform].Key));
         }
 
-        // GET: api/ChromiumDownload/{platform}
+        // GET: api/ChromiumUrls/{platform}
         [HttpGet("{platform}", Name = "Get")]
         public string Get(string platform)
         {
