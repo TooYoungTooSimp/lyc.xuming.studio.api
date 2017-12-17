@@ -23,8 +23,8 @@ namespace lyc.xuming.studio.api.Controllers
             {
                 downloadUrlTemplates.Add("Win", templatePrefix + "Win%2F{0}%2Fchrome-win32.zip?alt=media");
                 downloadUrlTemplates.Add("Win_x64", templatePrefix + "Win_x64%2F{0}%2Fchrome-win32.zip?alt=media");
-                downloadUrlTemplates.Add("Linux", templatePrefix + "Linux %2F{0}%2Fchrome-linux.zip?alt=media");
-                downloadUrlTemplates.Add("Linux_x64", templatePrefix + "Linux_x64 %2F{0}%2Fchrome-linux.zip?alt=media");
+                downloadUrlTemplates.Add("Linux", templatePrefix + "Linux%2F{0}%2Fchrome-linux.zip?alt=media");
+                downloadUrlTemplates.Add("Linux_x64", templatePrefix + "Linux_x64%2F{0}%2Fchrome-linux.zip?alt=media");
                 downloadUrlTemplates.Add("Mac", templatePrefix + "Mac%2F{0}%2Fchrome-mac.zip?alt=media");
             }
         }
