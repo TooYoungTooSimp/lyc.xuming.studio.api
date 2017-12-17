@@ -14,7 +14,7 @@ namespace lyc.xuming.studio.api.Controllers
         static string templatePrefix = "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/";
         static string buildNumTemplate = templatePrefix + "{0}%2FLAST_CHANGE?alt=media";
         static Dictionary<string, string> downloadUrlTemplates = new Dictionary<string, string>();
-        public ChromiumDownloadController()
+        public ChromiumUrlsController()
         {
             if (ChromiumBuilds.Count == 0)
                 foreach (var platformStr in new string[] { "Win", "Win_x64", "Linux", "Linux_x64", "Mac" })
