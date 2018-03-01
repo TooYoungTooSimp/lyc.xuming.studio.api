@@ -3,3 +3,6 @@ mono: none
 dotnet: 2.1.4
 script:
   - dotnet publish -c Release -r linux-x64 -o dist-linux
+  - dotnet publish -c Release -r win-x64 -o dist-win64
+  - dotnet publish -c Release -r win-x86 -o dist-win32
+  - dotnet publish -c Release -r osx-x64 -o dist-osx
