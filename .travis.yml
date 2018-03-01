@@ -2,15 +2,16 @@ language: csharp
 mono: none
 dotnet: 2.1.4
 script:
+  - dotnet restore
   - dotnet publish -c Release -r linux-x64 -o dist-linux
   - dotnet publish -c Release -r win-x64 -o dist-win64
   - dotnet publish -c Release -r win-x86 -o dist-win32
   - dotnet publish -c Release -r osx-x64 -o dist-osx
 before_deploy:
-  - cd dist-linux && tar cJf ../lyc.xuming.studio.api-linux.tar.xz . %% cd ..
-  - cd dist-win64 && tar cJf ../lyc.xuming.studio.api-win64.tar.xz . %% cd ..
-  - cd dist-win32 && tar cJf ../lyc.xuming.studio.api-win32.tar.xz . %% cd ..
-  - cd dist-osx && tar cJf ../lyc.xuming.studio.api-osx.tar.xz . %% cd ..
+  - cd dist-linux && tar cJf ../lyc.xuming.studio.api-linux.tar.xz . && cd ..
+  - cd dist-win64 && tar cJf ../lyc.xuming.studio.api-win64.tar.xz . && cd ..
+  - cd dist-win32 && tar cJf ../lyc.xuming.studio.api-win32.tar.xz . && cd ..
+  - cd dist-osx && tar cJf ../lyc.xuming.studio.api-osx.tar.xz . && cd ..
 deploy:
   provider: releases
   skip_cleanup: true
