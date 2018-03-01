@@ -10,11 +10,13 @@ namespace lyc.xuming.studio.api.Controllers
     [Route("api/[controller]/[action]")]
     public class MusicLinkController : Controller
     {
+        static readonly Func<string, string> UrlDecode = WebUtility.UrlDecode;
+
         [HttpHead("{id:int}/{rule?}")]
         [HttpGet("{id:int}/{rule?}")]
         public IActionResult Xiami(int id, string rule)
         {
-            string ret = "";
+            string ret = null;
             using (var wc = new WebClient())
                 ret = JsonConvert.DeserializeObject<dynamic>(wc.DownloadString("http://www.xiami.com/widget/json-single/sid/" + id.ToString()))["location"].Value;
             int len = ret.Length - 1, line = Int32.Parse(ret[0].ToString()), lineLength = (len + line - 1) / line, shortLine = lineLength * line - len;
@@ -31,8 +33,7 @@ namespace lyc.xuming.studio.api.Controllers
                 sb.Append(ret[i % line * lineLength + i / line]);
             string result = WebUtility.UrlDecode(sb.ToString()).Replace('^', '0');
             string target = String.IsNullOrEmpty(rule) ? result :
-                JsonConvert.DeserializeObject<string[][]>(rule).AsParallel().Aggregate(result, (ori, rep)
-                => ori.Replace(WebUtility.UrlDecode(rep[0]), WebUtility.UrlDecode(rep[1])));
+                JsonConvert.DeserializeObject<string[][]>(rule).AsParallel().Aggregate(result, (ori, rep) => ori.Replace(UrlDecode(rep[0]), UrlDecode(rep[1])));
             return Redirect(target);
         }
     }
