@@ -9,18 +9,19 @@ script:
   - dotnet publish -c Release -r osx-x64   -o dist-osx
 before_deploy:
   - export PROJ=lyc.xuming.studio.api
+  - export _TAG="`TZ='Asia/Shanghai' date +'%Y%m%d%H%M%S'`.`git log --format=%h -1`"
   - chmod +x ./dist-linux/$PROJ ./dist-macos/$PROJ
-  - mv dist-win64 $PROJ && tar cJf $PROJ-win64.tar.xz $PROJ && rm -rf $PROJ
-  - mv dist-win32 $PROJ && tar cJf $PROJ-win32.tar.xz $PROJ && rm -rf $PROJ
-  - mv dist-linux $PROJ && tar cJf $PROJ-linux.tar.xz $PROJ && rm -rf $PROJ
-  - mv dist-macos $PROJ && tar cJf $PROJ-macos.tar.xz $PROJ && rm -rf $PROJ
-  - git tag "`TZ='Asia/Shanghai' date +'%Y%m%d%H%M%S'`.`git log --format=%h -1`"
+  - mv dist-win64 $PROJ && tar cJf $PROJ.win64.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+  - mv dist-win32 $PROJ && tar cJf $PROJ.win32.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+  - mv dist-linux $PROJ && tar cJf $PROJ.linux.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+  - mv dist-macos $PROJ && tar cJf $PROJ.macos.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+  - git tag "$_TAG"
 deploy:
   provider: releases
   skip_cleanup: true
   api_key: $GITHUB_TOKEN
   file:
-    - $PROJ-linux.tar.xz
-    - $PROJ-win64.tar.xz
-    - $PROJ-win32.tar.xz
-    - $PROJ-macos.tar.xz
+    - $PROJ.linux.tar.xz
+    - $PROJ.win64.tar.xz
+    - $PROJ.win32.tar.xz
+    - $PROJ.macos.tar.xz
