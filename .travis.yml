@@ -6,7 +6,7 @@ script:
   - dotnet publish -c Release -r linux-x64 -o dist-linux
   - dotnet publish -c Release -r win-x64   -o dist-win64
   - dotnet publish -c Release -r win-x86   -o dist-win32
-  - dotnet publish -c Release -r osx-x64   -o dist-osx
+  - dotnet publish -c Release -r osx-x64   -o dist-macos
 before_deploy:
   - export PROJ=lyc.xuming.studio.api
   - export _TAG="`TZ='Asia/Shanghai' date +'%Y%m%d%H%M%S'`.`git log --format=%h -1`"
