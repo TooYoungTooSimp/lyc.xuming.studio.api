@@ -1,6 +1,6 @@
 language: csharp
 mono: none
-dotnet: 2.1.4
+dotnet: 2.1.101
 script:
   - dotnet restore
   - dotnet publish -c Release -r linux-x64 -o dist-linux
