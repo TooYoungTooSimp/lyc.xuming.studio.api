@@ -1,6 +1,9 @@
 language: csharp
 mono: none
 dotnet: 2.1.200
+branches:
+  except:
+    - /^\d{14}\.[0-9a-z]{7}$/
 script:
   - dotnet restore
   - dotnet publish -c Release -r linux-x64 -o dist-linux
