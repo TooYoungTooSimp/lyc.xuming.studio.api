@@ -7,8 +7,9 @@ using System.Net;
 namespace lyc.xuming.studio.api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/ChromiumUrls")]
-    public class ChromiumUrlsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ChromiumUrlsController : ControllerBase
     {
         static Dictionary<string, KeyValuePair<string, DateTime>> ChromiumBuilds = new Dictionary<string, KeyValuePair<string, DateTime>>();
         static string templatePrefix = "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/";

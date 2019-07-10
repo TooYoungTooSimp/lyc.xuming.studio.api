@@ -8,7 +8,8 @@ using System.Text;
 namespace lyc.xuming.studio.api.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class MusicLinkController : Controller
+    [ApiController]
+    public class MusicLinkController : ControllerBase
     {
         static readonly Func<string, string> UrlDecode = WebUtility.UrlDecode;
 
