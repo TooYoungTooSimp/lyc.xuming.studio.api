@@ -22,6 +22,5 @@ namespace lyc.xuming.studio.api.Utilities
                 arr[i] = (byte)((mp[s[i << 1]] << 4) + mp[s[i << 1 | 1]]);
             return arr;
         }
-
     }
 }
