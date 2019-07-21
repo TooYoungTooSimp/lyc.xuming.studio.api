@@ -1,31 +1,30 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 
 namespace lyc.xuming.studio.api
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
-            IHostingEnvironment Environment = null;
+        public static void Main(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .ConfigureLogging((context, logging) =>
+                .ConfigureServices((ctx, svc) =>
                 {
-                    Environment = context.HostingEnvironment;
-                    if (Environment.IsProduction())
-                        logging.SetMinimumLevel(LogLevel.Warning);
+                    var redisConnStr = ctx.Configuration["ConnStr:Redis"];
+                    svc.AddMvc();
+                    svc.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConnStr));
                 })
-                .ConfigureServices(services => services.AddMvc())
                 .Configure(app =>
                 {
-                    if (Environment.IsDevelopment())
+                    var env = app.ApplicationServices.GetRequiredService<IHostingEnvironment>();
+                    if (env.IsDevelopment())
                         app.UseDeveloperExceptionPage();
                     app.UseMvc();
                 })
                 .Build().Run();
-        }
     }
 }
