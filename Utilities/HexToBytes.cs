@@ -18,8 +18,8 @@ namespace lyc.xuming.studio.api.Utilities
         {
             if ((s.Length & 1) != 0) throw new ArgumentException("Hex string should have even length.");
             byte[] arr = new byte[s.Length >> 1];
-            for (int i = 0; i < s.Length; i += 2)
-                arr[i >> 1] = (byte)((mp[s[i]] << 4) + mp[s[i + 1]]);
+            for (int i = 0; i < arr.Length; i++)
+                arr[i] = (byte)((mp[s[i << 1]] << 4) + mp[s[i << 1 | 1]]);
             return arr;
         }
 
