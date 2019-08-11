@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Net;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace lyc.xuming.studio.api.Controllers
         {
             string ret = null;
             using (var wc = new WebClient())
-                ret = JsonConvert.DeserializeObject<dynamic>(wc.DownloadString("http://www.xiami.com/widget/json-single/sid/" + id.ToString()))["location"].Value;
+                ret = JsonSerializer.Deserialize<dynamic>(wc.DownloadString("http://www.xiami.com/widget/json-single/sid/" + id.ToString()))["location"].Value;
             int len = ret.Length - 1, line = Int32.Parse(ret[0].ToString()), lineLength = (len + line - 1) / line, shortLine = lineLength * line - len;
             var sb = new StringBuilder();
             ret = ret.Substring(1);
@@ -34,7 +34,7 @@ namespace lyc.xuming.studio.api.Controllers
                 sb.Append(ret[i % line * lineLength + i / line]);
             string result = WebUtility.UrlDecode(sb.ToString()).Replace('^', '0');
             string target = String.IsNullOrEmpty(rule) ? result :
-                JsonConvert.DeserializeObject<string[][]>(rule).AsParallel().Aggregate(result, (ori, rep) => ori.Replace(UrlDecode(rep[0]), UrlDecode(rep[1])));
+                JsonSerializer.Deserialize<string[][]>(rule).AsParallel().Aggregate(result, (ori, rep) => ori.Replace(UrlDecode(rep[0]), UrlDecode(rep[1])));
             return Redirect(target);
         }
     }

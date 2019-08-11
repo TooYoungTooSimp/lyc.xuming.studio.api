@@ -1,15 +1,15 @@
 language: csharp
 mono: none
-dotnet: 2.2.301
+dotnet: 3.0.100-preview7-012821
 branches:
   except:
     - /^\d{14}\.[0-9a-f]{7}$/
 script:
   - dotnet restore
-  - dotnet publish -c Release -r linux-x64 -o dist-linux
-  - dotnet publish -c Release -r win-x64   -o dist-win64
-  - dotnet publish -c Release -r win-x86   -o dist-win32
-  - dotnet publish -c Release -r osx-x64   -o dist-macos
+  - dotnet publish -c Release -r linux-x64 -o dist-linux /p:PublishSingleFile=true /p:PublishTrimmed=true
+  - dotnet publish -c Release -r win-x64   -o dist-win64 /p:PublishSingleFile=true /p:PublishTrimmed=true
+  - dotnet publish -c Release -r win-x86   -o dist-win32 /p:PublishSingleFile=true /p:PublishTrimmed=true
+  - dotnet publish -c Release -r osx-x64   -o dist-macos /p:PublishSingleFile=true /p:PublishTrimmed=true
 before_deploy:
   - export PROJ=lyc.xuming.studio.api
   - export _TAG="`TZ='Asia/Shanghai' date +'%Y%m%d%H%M%S'`.`git log --format=%h -1`"
