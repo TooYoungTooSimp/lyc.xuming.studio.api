@@ -5,7 +5,7 @@ branches:
   except:
     - /^\d{14}\.[0-9a-f]{7}$/
 script:
-  - curl -sSL https://dot.net/v1/dotnet-install.sh | bash - --channel Current --install-dir /opt/dotnet
+  - curl -sSL https://dot.net/v1/dotnet-install.sh | bash - -- --channel Current --install-dir /opt/dotnet
   - export PATH=/opt/dotnet:$PATH
   - dotnet restore
   - dotnet publish -c Release -r linux-x64 -o dist-linux /p:PublishSingleFile=true /p:PublishTrimmed=true
