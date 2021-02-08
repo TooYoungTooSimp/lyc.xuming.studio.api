@@ -52,4 +52,4 @@ jobs:
         do
           gh release delete $rel -y
         done
-        gh release create latest "${assets[@]}" -n "Latest Release"
+        gh release create latest "${assets[@]}" -t "Latest Release"
