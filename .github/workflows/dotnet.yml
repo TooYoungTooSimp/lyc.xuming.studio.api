@@ -41,7 +41,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PROJ: lyc.xuming.studio.api
-        _TAG: ${{ github.ref }}
       run: |
         assets=()
         for asset in ./*.tar.xz; do
