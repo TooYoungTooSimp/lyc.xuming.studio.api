@@ -40,7 +40,6 @@ jobs:
     - name: Publish Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PROJ: lyc.xuming.studio.api
       run: |
         assets=(*.tar.xz)
         for rel in $(gh release list | awk -F'\t' '{print$3}')
