@@ -1,4 +1,4 @@
-name: .NET
+name: Build and release
 
 on:
   workflow_dispatch:
@@ -31,12 +31,11 @@ jobs:
     - name: Pack
       env:
         PROJ: lyc.xuming.studio.api
-        _TAG: ${{ github.ref }}
       run: |
-        mv dist-linux $PROJ && tar cJf $PROJ.linux.$_TAG.tar.xz $PROJ && rm -rf $PROJ
-        mv dist-win64 $PROJ && tar cJf $PROJ.win64.$_TAG.tar.xz $PROJ && rm -rf $PROJ
-        mv dist-win32 $PROJ && tar cJf $PROJ.win32.$_TAG.tar.xz $PROJ && rm -rf $PROJ
-        mv dist-macos $PROJ && tar cJf $PROJ.macos.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+        mv dist-linux $PROJ && tar cJf $PROJ.linux.tar.xz $PROJ && rm -rf $PROJ
+        mv dist-win64 $PROJ && tar cJf $PROJ.win64.tar.xz $PROJ && rm -rf $PROJ
+        mv dist-win32 $PROJ && tar cJf $PROJ.win32.tar.xz $PROJ && rm -rf $PROJ
+        mv dist-macos $PROJ && tar cJf $PROJ.macos.tar.xz $PROJ && rm -rf $PROJ
     
     - name: Publish Release
       env:
@@ -46,7 +45,10 @@ jobs:
       run: |
         assets=()
         for asset in ./*.tar.xz; do
-          assets+=("-a" "$asset")
+          assets+=("$asset")
         done
-        tag_name="${GITHUB_REF##*/}"
-        hub release create "${assets[@]}" -m "Release $tag_name" "$tag_name"
+        for rel in $(./gh release list |awk '{print $1}')
+        do
+          ./gh release delete $rel -y
+        done
+        gh release create latest "${assets[@]}"
