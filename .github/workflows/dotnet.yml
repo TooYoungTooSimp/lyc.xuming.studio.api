@@ -48,7 +48,7 @@ jobs:
           assets+=("$asset")
         done
         git ls-remote --tags | awk '{print$2}' | xargs git push --delete origin || 1
-        for rel in $(./gh release list |awk '{print $1}')
+        for rel in $(gh release list | awk '{print $1}')
         do
           gh release delete $rel -y
         done
