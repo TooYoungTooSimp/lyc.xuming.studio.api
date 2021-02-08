@@ -1,38 +1,26 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using StackExchange.Redis;
 
 namespace lyc.xuming.studio.api
 {
     public class Program
     {
-        public static void Main(string[] args) =>
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(builder =>
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    builder.ConfigureServices((ctx, svc) =>
-                    {
-                        var redisConnStr = ctx.Configuration["ConnStr:Redis"];
-                        svc.AddControllers();
-                        svc.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConnStr));
-                    })
-                    .Configure(app =>
-                    {
-                        var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
-                        if (env.IsDevelopment())
-                            app.UseDeveloperExceptionPage();
-                        app.UseRouting();
-                        app.UseEndpoints(endpoints =>
-                        {
-                            endpoints.MapControllers();
-                        });
-                    });
-                })
-                .Build().Run();
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
