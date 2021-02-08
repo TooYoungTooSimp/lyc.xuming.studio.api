@@ -47,9 +47,9 @@ jobs:
         for asset in ./*.tar.xz; do
           assets+=("$asset")
         done
-        git ls-remote --tags | awk '{print$2}' | xargs git push --delete origin || true
         for rel in $(gh release list | awk -F'\t' '{print$3}')
         do
           gh release delete $rel -y
         done
+        git ls-remote --tags | awk '{print$2}' | xargs git push --delete origin || true
         gh release create latest "${assets[@]}" -t "Latest Release"
