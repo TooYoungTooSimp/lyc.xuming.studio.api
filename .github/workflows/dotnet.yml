@@ -42,10 +42,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PROJ: lyc.xuming.studio.api
       run: |
-        assets=()
-        for asset in ./*.tar.xz; do
-          assets+=("$asset")
-        done
+        assets=(*.tar.xz)
         for rel in $(gh release list | awk -F'\t' '{print$3}')
         do
           gh release delete $rel -y
