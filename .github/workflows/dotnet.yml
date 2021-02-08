@@ -49,6 +49,6 @@ jobs:
         done
         for rel in $(./gh release list |awk '{print $1}')
         do
-          ./gh release delete $rel -y
+          gh release delete $rel -y
         done
-        gh release create latest "${assets[@]}"
+        gh release create latest "${assets[@]}" -n "Latest Release"
