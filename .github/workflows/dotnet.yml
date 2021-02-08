@@ -1,0 +1,52 @@
+name: .NET
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: |
+        dotnet publish -c Release -o dist-linux /p:PublishSingleFile=true -p:SelfContained=false -p:RuntimeIdentifier=linux-x64 
+        dotnet publish -c Release -o dist-win64 /p:PublishSingleFile=true -p:SelfContained=false -p:RuntimeIdentifier=win-x64
+        dotnet publish -c Release -o dist-win32 /p:PublishSingleFile=true -p:SelfContained=false -p:RuntimeIdentifier=win-x86
+        dotnet publish -c Release -o dist-macos /p:PublishSingleFile=true -p:SelfContained=false -p:RuntimeIdentifier=osx-x64
+    
+    - name: Pack
+      env:
+        PROJ: lyc.xuming.studio.api
+        _TAG: ${{ github.ref }}
+      run: |
+        mv dist-linux $PROJ && tar cJf $PROJ.linux.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+        mv dist-win64 $PROJ && tar cJf $PROJ.win64.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+        mv dist-win32 $PROJ && tar cJf $PROJ.win32.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+        mv dist-macos $PROJ && tar cJf $PROJ.macos.$_TAG.tar.xz $PROJ && rm -rf $PROJ
+    
+    - name: Publish Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PROJ: lyc.xuming.studio.api
+        _TAG: ${{ github.ref }}
+      run: |
+        assets=()
+        for asset in ./*.tar.xz; do
+          assets+=("-a" "$asset")
+        done
+        tag_name="${GITHUB_REF##*/}"
+        hub release create "${assets[@]}" -m "Release $tag_name" "$tag_name"
