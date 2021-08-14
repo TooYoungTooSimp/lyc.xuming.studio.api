@@ -23,10 +23,10 @@ jobs:
     
     - name: Build
       run: |
-        dotnet publish -c Release -o ../dist-linux -p:PublishSingleFile=true -p:SelfContained=false -p:PublishReadyToRun=true -p:RuntimeIdentifier=linux-x64 
-        dotnet publish -c Release -o ../dist-win64 -p:PublishSingleFile=true -p:SelfContained=false -p:PublishReadyToRun=true -p:RuntimeIdentifier=win-x64
-        dotnet publish -c Release -o ../dist-win32 -p:PublishSingleFile=true -p:SelfContained=false -p:PublishReadyToRun=true -p:RuntimeIdentifier=win-x86
-        dotnet publish -c Release -o ../dist-macos -p:PublishSingleFile=true -p:SelfContained=false -p:PublishReadyToRun=true -p:RuntimeIdentifier=osx-x64
+        dotnet publish -c Release -o ../dist-linux -p:PublishSingleFile=true -p:SelfContained=false -p:RuntimeIdentifier=linux-x64 
+        dotnet publish -c Release -o ../dist-win64 -p:PublishSingleFile=true -p:SelfContained=false -p:RuntimeIdentifier=win-x64
+        dotnet publish -c Release -o ../dist-win32 -p:PublishSingleFile=true -p:SelfContained=false -p:RuntimeIdentifier=win-x86
+        dotnet publish -c Release -o ../dist-macos -p:PublishSingleFile=true -p:SelfContained=false -p:RuntimeIdentifier=osx-x64
     
     - name: Pack
       env:
