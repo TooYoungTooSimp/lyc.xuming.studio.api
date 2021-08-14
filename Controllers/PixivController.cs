@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,20 @@ namespace lyc.xuming.studio.api.Controllers
     public class PixivController : ControllerBase
     {
         private static readonly HttpClient HttpClient = new();
+        private readonly IDatabase db;
+        public PixivController(IConnectionMultiplexer connection)
+        {
+            db = connection.GetDatabase();
+        }
         [Route("[action]")]
         public async Task<string> IndexAsync()
         {
-            return await HttpClient.GetStringAsync("https://www.pixiv.net/");
+            var pixivHomeCache = db.StringGet("pixiv_cache");
+            if (!pixivHomeCache.IsNullOrEmpty)
+                return pixivHomeCache;
+            var pixivHomePage = await HttpClient.GetStringAsync("https://www.pixiv.net/");
+            await db.StringSetAsync("pixiv_cache", pixivHomePage, TimeSpan.FromMinutes(5));
+            return pixivHomePage;
         }
     }
 }

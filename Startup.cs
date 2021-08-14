@@ -28,7 +28,7 @@ namespace lyc.xuming.studio.api
 
             services.AddControllers();
 
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(Configuration["ConnStr:Redis"]));
+            services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(Configuration["ConnStr:Redis"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
