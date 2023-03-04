@@ -13,19 +13,18 @@ namespace lyc.xuming.studio.api.Controllers
     [ApiController]
     public class PixivController : ControllerBase
     {
-        private static readonly HttpClient HttpClient = new();
+        private static readonly HttpClient httpClient = new();
         private readonly IDatabase db;
-        public PixivController(IConnectionMultiplexer connection)
-        {
-            db = connection.GetDatabase();
-        }
+
+        public PixivController(IConnectionMultiplexer connection) => db = connection.GetDatabase();
+
         [Route("[action]")]
         public async Task<string> IndexAsync()
         {
             var pixivHomeCache = db.StringGet("pixiv_cache");
             if (!pixivHomeCache.IsNullOrEmpty)
                 return pixivHomeCache;
-            var pixivHomePage = await HttpClient.GetStringAsync("https://www.pixiv.net/");
+            var pixivHomePage = await httpClient.GetStringAsync("https://www.pixiv.net/");
             await db.StringSetAsync("pixiv_cache", pixivHomePage, TimeSpan.FromMinutes(5));
             return pixivHomePage;
         }

@@ -15,10 +15,10 @@ namespace lyc.xuming.studio.api.Controllers
         static readonly string templatePrefix = "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/";
         static readonly string buildNumTemplate = templatePrefix + "{0}%2FLAST_CHANGE?alt=media";
         static readonly Dictionary<string, string> downloadUrlTemplates = new();
-        readonly HttpClient httpClient;
-        public ChromiumUrlsController(HttpClient httpClient)
+        private static readonly HttpClient httpClient = new();
+
+        public ChromiumUrlsController()
         {
-            this.httpClient = httpClient;
             if (ChromiumBuilds.Count == 0)
                 foreach (var platformStr in new string[] { "Win", "Win_x64", "Linux", "Linux_x64", "Mac" })
                     ChromiumBuilds[platformStr] = new("", new DateTime(0));

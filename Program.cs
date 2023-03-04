@@ -8,8 +8,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(builder.Configuration["ConnStr:Redis"]));
 
-builder.Services.AddHttpClient();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

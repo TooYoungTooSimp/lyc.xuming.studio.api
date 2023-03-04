@@ -12,11 +12,7 @@ namespace lyc.xuming.studio.api.Controllers
     public class MusicLinkController : ControllerBase
     {
         static readonly Func<string, string> UrlDecode = WebUtility.UrlDecode;
-        readonly HttpClient httpClient;
-        public MusicLinkController(HttpClient httpClient)
-        {
-            this.httpClient = httpClient;
-        }
+        private static readonly HttpClient httpClient = new();
 
         [HttpHead("{id:int}/{rule?}")]
         [HttpGet("{id:int}/{rule?}")]
