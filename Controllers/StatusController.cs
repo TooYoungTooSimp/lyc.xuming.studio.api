@@ -41,7 +41,7 @@ namespace lyc.xuming.studio.api.Controllers
             if (valueRaw.Count != 1 || secretRaw.Count != 1) return BadRequest();
             var (value, secret) = (valueRaw.First(), secretRaw.First());
             var (secret_hash, target_hash) = (Encoding.Default.GetBytes(secret), HexToBytes.Convert(config["Secrets:StatusUpdateKeyHash"]));
-            using (SHA512 hasher = new SHA512Managed())
+            using (SHA512 hasher = SHA512.Create())
                 secret_hash = hasher.ComputeHash(secret_hash);
             if (!SpanEqual(secret_hash, target_hash))
                 return Unauthorized();
