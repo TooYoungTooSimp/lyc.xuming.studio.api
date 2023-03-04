@@ -11,12 +11,14 @@ namespace lyc.xuming.studio.api.Controllers
     [ApiController]
     public class ChromiumUrlsController : ControllerBase
     {
-        static Dictionary<string, KeyValuePair<string, DateTime>> ChromiumBuilds = new();
-        static string templatePrefix = "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/";
-        static string buildNumTemplate = templatePrefix + "{0}%2FLAST_CHANGE?alt=media";
-        static Dictionary<string, string> downloadUrlTemplates = new();
-        public ChromiumUrlsController()
+        static readonly Dictionary<string, KeyValuePair<string, DateTime>> ChromiumBuilds = new();
+        static readonly string templatePrefix = "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/";
+        static readonly string buildNumTemplate = templatePrefix + "{0}%2FLAST_CHANGE?alt=media";
+        static readonly Dictionary<string, string> downloadUrlTemplates = new();
+        readonly HttpClient httpClient;
+        public ChromiumUrlsController(HttpClient httpClient)
         {
+            this.httpClient = httpClient;
             if (ChromiumBuilds.Count == 0)
                 foreach (var platformStr in new string[] { "Win", "Win_x64", "Linux", "Linux_x64", "Mac" })
                     ChromiumBuilds[platformStr] = new("", new DateTime(0));
@@ -31,28 +33,26 @@ namespace lyc.xuming.studio.api.Controllers
         }
         // GET: api/ChromiumUrls
         [HttpGet]
-        public object Get()
+        public async Task<object> GetAsync()
         {
-            var wc = new WebClient();
             var now = DateTime.Now;
             foreach (var platform in ChromiumBuilds.Keys.ToArray())
                 if (now - ChromiumBuilds[platform].Value > TimeSpan.FromMinutes(30))
-                    ChromiumBuilds[platform] = new(wc.DownloadString(String.Format(buildNumTemplate, platform)), now);
-            return ChromiumBuilds.Keys.ToDictionary(platform => platform, platform => String.Format(downloadUrlTemplates[platform], ChromiumBuilds[platform].Key));
+                    ChromiumBuilds[platform] = new(await httpClient.GetStringAsync(string.Format(buildNumTemplate, platform)), now);
+            return ChromiumBuilds.Keys.ToDictionary(platform => platform, platform => string.Format(downloadUrlTemplates[platform], ChromiumBuilds[platform].Key));
         }
 
         // GET: api/ChromiumUrls/{platform}
         [HttpGet("{platform}", Name = "Get")]
-        public string Get(string platform)
+        public async Task<string> GetAsync(string platform)
         {
             if (!ChromiumBuilds.ContainsKey(platform)) return "";
             else
             {
-                var wc = new WebClient();
                 var now = DateTime.Now;
                 if (now - ChromiumBuilds[platform].Value > TimeSpan.FromMinutes(30))
-                    ChromiumBuilds[platform] = new(wc.DownloadString(String.Format(buildNumTemplate, platform)), now);
-                return String.Format(downloadUrlTemplates[platform], ChromiumBuilds[platform].Key);
+                    ChromiumBuilds[platform] = new(await httpClient.GetStringAsync(string.Format(buildNumTemplate, platform)), now);
+                return string.Format(downloadUrlTemplates[platform], ChromiumBuilds[platform].Key);
             }
         }
     }
