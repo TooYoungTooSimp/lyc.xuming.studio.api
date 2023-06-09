@@ -18,7 +18,7 @@ namespace lyc.xuming.studio.api.Controllers
     {
         private readonly IDatabase db;
         private readonly IConfiguration config;
-        private bool SpanEqual(ReadOnlySpan<byte> span1, ReadOnlySpan<byte> span2) => span1.SequenceEqual(span2);
+        private static bool SpanEqual(ReadOnlySpan<byte> span1, ReadOnlySpan<byte> span2) => span1.SequenceEqual(span2);
         public StatusController(IConnectionMultiplexer connection, IConfiguration configuration)
         {
             config = configuration;
@@ -40,9 +40,7 @@ namespace lyc.xuming.studio.api.Controllers
             var (valueRaw, secretRaw) = (Request.Form["value"], Request.Form["secret"]);
             if (valueRaw.Count != 1 || secretRaw.Count != 1) return BadRequest();
             var (value, secret) = (valueRaw.First(), secretRaw.First());
-            var (secret_hash, target_hash) = (Encoding.Default.GetBytes(secret), HexToBytes.Convert(config["Secrets:StatusUpdateKeyHash"]));
-            using (SHA512 hasher = SHA512.Create())
-                secret_hash = hasher.ComputeHash(secret_hash);
+            var (secret_hash, target_hash) = (SHA512.HashData(Encoding.Default.GetBytes(secret)), HexToBytes.Convert(config["Secrets:StatusUpdateKeyHash"]));
             if (!SpanEqual(secret_hash, target_hash))
                 return Unauthorized();
             if (await db.StringSetAsync(key, value))

@@ -10,8 +10,8 @@ namespace lyc.xuming.studio.api.Controllers
     {
         static class HaPoem
         {
-            static private string[] strs = System.IO.File.ReadAllLines("poem.txt");
-            static private Random rnd = new Random();
+            private static readonly string[] strs = System.IO.File.ReadAllLines("poem.txt");
+            private static readonly Random rnd = new();
             static public string GetString() => strs[rnd.Next(0, strs.Length)];
             static public string GetString(int id) => strs[id % strs.Length];
         }

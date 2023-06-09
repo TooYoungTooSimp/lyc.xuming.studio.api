@@ -13,7 +13,7 @@ namespace lyc.xuming.studio.api.Controllers
     public class EchoController : ControllerBase
     {
         [Route("[action]/{type_a?}/{type_b?}/{s}")]
-        public ContentResult base64(string type_a, string type_b, string s) =>
+        public ContentResult Base64(string type_a, string type_b, string s) =>
             Content(s.Base64DecodeToString(), $"{type_a ?? "text"}/{type_b ?? "plain"}");
     }
 }
